@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/task.dart';
 
 class TaskStorage {
+  // Versioned key to handle future schema changes
   static const _key = 'tasks_v1';   
 
   Future<List<Task>> loadTasks() async {

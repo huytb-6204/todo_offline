@@ -6,25 +6,25 @@ class TaskTile extends StatelessWidget {
   final ValueChanged<bool?> onToggle;
   final VoidCallback onTap;
 
-  TaskTile({
+  const TaskTile({
     super.key,
     required this.task,
     required this.onToggle,
     required this.onTap,
-  })
+  });
 
   @override
   Widget build(BuildContext context) {
-   return ListTile(
-    onTap: onTap,
-    leading: Checkbox(value: task.isDone, onChanged: onToggle),
-    title: Text(
-      task.title,
-      style: TextStyle(
-        decoration: task.isDone ? TextDecoration.lineThrough : null,
+    return ListTile(
+      onTap: onTap,
+      leading: Checkbox(value: task.isDone, onChanged: onToggle),
+      title: Text(
+        task.title,
+        style: TextStyle(
+          decoration: task.isDone ? TextDecoration.lineThrough : null,
+        ),
       ),
-    ),
-    subtitle: task.description == null ? null : Text(task.description!),
-   );
+      subtitle: task.description == null ? null : Text(task.description!),
+    );
   }
 }
