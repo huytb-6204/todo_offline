@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/task.dart';
-import '../services/task_storage.dart';
+import '../repositories/task_repository.dart';
 import '../widgets/task_tile.dart';
 import 'task_form_screen.dart';
 
@@ -13,7 +13,7 @@ class TaskListScreen extends StatefulWidget {
 }
 
 class _TaskListScreenState extends State<TaskListScreen> {
-  final TaskStorage _storage = TaskStorage();
+  final TaskRepository _repository = TaskRepository();
 
   final List<Task> _tasks = [];
   bool _loading = true;
@@ -26,7 +26,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   /// Load danh sách task từ SharedPreferences (async)
   Future<void> _loadTasks() async {
-    final loaded = await _storage.loadTasks();
+    final loaded = await _repository.loadTasks();
     if (!mounted) return;
 
     setState(() {
@@ -39,7 +39,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   /// Save danh sách task xuống SharedPreferences (async)
   Future<void> _saveTasks() async {
-    await _storage.saveTasks(_tasks);
+    await _repository.saveTasks(_tasks);
   }
 
   /// Thêm task: mở form -> nhận Task trả về -> insert -> save
@@ -68,16 +68,19 @@ class _TaskListScreenState extends State<TaskListScreen> {
     await _saveTasks();
   }
 
-  /// Toggle done/undone
-  Future<void> _toggleDone(int index, bool value) async {
-    final task = _tasks[index];
-    setState(() => _tasks[index] = task.copyWith(isDone: value));
-    await _saveTasks();
-  }
+
 
   /// Xoá task theo index
   Future<void> _deleteTask(int index) async {
     setState(() => _tasks.removeAt(index));
+    await _saveTasks();
+  }
+
+
+    /// Toggle done/undone
+  Future<void> _toggleDone(int index, bool value) async {
+    final task = _tasks[index];
+    setState(() => _tasks[index] = task.copyWith(isDone: value));
     await _saveTasks();
   }
 
